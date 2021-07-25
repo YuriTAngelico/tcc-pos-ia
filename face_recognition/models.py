@@ -33,6 +33,10 @@ class AIModel(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
+    def __str__(self):
+        return self.name
+        
+
 class AIFaceDetector(models.Model):
     name = models.CharField(max_length=30, default='face_detector')
     face_detection_model = models.FileField(upload_to='ai_face_detector/')
