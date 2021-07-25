@@ -1,4 +1,4 @@
-# TCC Post Graduation in Artifial Inteligence
+# TCC Post Graduation in Artificial Inteligence
 
 Student: Yuri Trevisan Angelico
 Contact: yuri.t.angelico@hotmail.com
