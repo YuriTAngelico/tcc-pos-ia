@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block contents %}
+
+<div style="padding: 50px 50px 50px 50px;">
+
+    <div class="row">
+        <div class="card col-lg-6">
+            <div class="card-body">
+                <div class="card-title">Create new employee</div>
+
+                <form method="POST" action="" class="post-form">
+                    {{employee_form.first_name|as_crispy_field}}
+                    {{employee_form.last_name|as_crispy_field}}
+                    {{employee_form.age|as_crispy_field}}
+                    {{employee_form.job_position|as_crispy_field}}
+                    <button type="submit" class="btn btn-md btn-primary">Create</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    {% include 'javascript.html'%}
+{% endblock %}

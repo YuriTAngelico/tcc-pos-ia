@@ -1,9 +1,17 @@
 from django.shortcuts import render
-
-# Create your views here.
-
+from django.views import View
 from django.http import HttpResponse
 
+from .forms import *
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+class Employee(View):
+
+    def get(self, request):
+
+        data = {}
+        data['employee_form'] = EmployeeForm()
+        return render(request, 'index.html', data)
+
+
+    def post(self, request):
+        pass

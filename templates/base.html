@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        {% block css%}
+            {% include 'css.html' %}
+        {% endblock%}
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>TCC Pós IA</title>
+
+    </head>
+
+    <body data-sidebar="dark">
+
+        {% block header %}
+        {% include 'header.html' %}
+        {% endblock %}
+
+        {% block contents %}
+        {% endblock %}
+
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <div class="row">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block footer %}
+        {% include 'footer.html' %}
+        {% endblock %}
+
+        {% block javascript %}
+        {% include 'javascript.html' %}
+        {% endblock %}
+
+    </body>
+</html>

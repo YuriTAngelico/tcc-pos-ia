@@ -16,9 +16,19 @@ class Employee(models.Model):
     def __str__(self):
         return self.first_name
 
+
 class Photo(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     photo = models.FileField(upload_to='employee_photo/')
+    timestamp = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.employee.first_name
+
+
+class Bloob(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     bloob = models.JSONField(default=dict)
     mask = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=True)
@@ -26,6 +36,7 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.employee.first_name
+
 
 class AIModel(models.Model):
     name = models.CharField(max_length=30, default='my_model')
@@ -35,9 +46,9 @@ class AIModel(models.Model):
 
     def __str__(self):
         return self.name
-        
 
-class AIFaceDetector(models.Model):
+
+class AIDetector(models.Model):
     name = models.CharField(max_length=30, default='face_detector')
     face_detection_model = models.FileField(upload_to='ai_face_detector/')
     timestamp = models.DateTimeField(auto_now=True)
@@ -45,6 +56,7 @@ class AIFaceDetector(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class AIRecognizer(models.Model):
     name = models.CharField(max_length=30, default='recognizer')
@@ -54,6 +66,7 @@ class AIRecognizer(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class AILabel(models.Model):
     name = models.CharField(max_length=30, default='labels')

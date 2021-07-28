@@ -11,23 +11,30 @@ admin.site.register(Employee, EmployeeHistoryAdmin)
 
 
 class PhotoHistoryAdmin(SimpleHistoryAdmin):
-    list_display = ['employee', 'mask', 'timestamp',]
-    history_list_display = ['employee', 'mask', 'timestamp',]
-    list_filter = ['employee', 'mask', 'timestamp',]
+    list_display = ['employee', 'timestamp',]
+    history_list_display = ['employee', 'timestamp',]
+    list_filter = ['employee', 'timestamp',]
 admin.site.register(Photo, PhotoHistoryAdmin)
 
 
-class AIFaceDetectorHistoryAdmin(SimpleHistoryAdmin):
+class BloobHistoryAdmin(SimpleHistoryAdmin):
+    list_display = ['employee', 'mask', 'timestamp',]
+    history_list_display = ['employee', 'mask', 'timestamp',]
+    list_filter = ['employee', 'mask', 'timestamp',]
+admin.site.register(Bloob, BloobHistoryAdmin)
+
+
+class AIDetectorHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['name', 'timestamp',]
     history_list_display = ['name', 'timestamp',]
     list_filter = ['name', 'timestamp',]
-admin.site.register(AIFaceDetector, AIFaceDetectorHistoryAdmin)
+admin.site.register(AIDetector, AIDetectorHistoryAdmin)
 
 
 class AIRecognizerHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['name', 'timestamp',]
     history_list_display = ['name', 'timestamp',]
-    list_filter = ['name', 'timestamp',]    
+    list_filter = ['name', 'timestamp',]
 admin.site.register(AIRecognizer, AIRecognizerHistoryAdmin)
 
 
