@@ -18,14 +18,18 @@
 
     </head>
 
-    <body data-sidebar="dark">
+    <body data-sidebar="dark" class="bg-light">
 
         {% block header %}
         {% include 'header.html' %}
         {% endblock %}
 
-        {% block contents %}
-        {% endblock %}
+        <div class="p-3">
+            <div class="container-fluid">
+                {% block contents %}
+                {% endblock %}
+            </div>
+        </div>
 
         <div class="main-content">
             <div class="page-content">
