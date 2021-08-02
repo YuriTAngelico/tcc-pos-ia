@@ -17,6 +17,7 @@ camera_button.addEventListener("click", async function () {
 });
 
 start_button.addEventListener("click", function () {
+  $("#info").html("Recording video...");
   // set MIME type of recording as video/webm
   media_recorder = new MediaRecorder(camera_stream, { mimeType: "video/webm" });
 
@@ -29,15 +30,18 @@ start_button.addEventListener("click", function () {
   media_recorder.addEventListener("stop", function () {
     // create local object URL from the recorded video blobs
     let video_local = URL.createObjectURL(
-      new Blob(blobs_recorded, { type: "video/webm" })
+      new Blob(blobs_recorded, { type: "video/mp4" })
     );
     download_link.href = video_local;
+    localStorage.setItem('video_local', video_local);
+    localStorage.setItem('blobs_recorded', new Blob(blobs_recorded, { type: "video/webm" }));
   });
 
   // start recording with each recorded blob having 1 second video
-  media_recorder.start(1000);
+  media_recorder.start(10);
 });
 
 stop_button.addEventListener("click", function () {
+  $("#info").html("Stopped recording, you can now download the video!");
   media_recorder.stop();
 });

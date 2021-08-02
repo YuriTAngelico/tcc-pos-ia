@@ -10,11 +10,11 @@ class EmployeeHistoryAdmin(SimpleHistoryAdmin):
 admin.site.register(Employee, EmployeeHistoryAdmin)
 
 
-class PhotoHistoryAdmin(SimpleHistoryAdmin):
+class EmployeePhotoHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['employee', 'timestamp',]
     history_list_display = ['employee', 'timestamp',]
     list_filter = ['employee', 'timestamp',]
-admin.site.register(Photo, PhotoHistoryAdmin)
+admin.site.register(EmployeePhoto, EmployeePhotoHistoryAdmin)
 
 
 class BloobHistoryAdmin(SimpleHistoryAdmin):

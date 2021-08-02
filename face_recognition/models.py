@@ -14,17 +14,27 @@ class Employee(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.first_name
+        return self.first_name + self.last_name
 
 
-class Photo(models.Model):
+class EmployeeFacePhoto(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     photo = models.FileField(upload_to='employee_photo/')
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.employee.first_name
+        return self.employee.first_name + self.employee.last_name
+
+
+class EmployeeFaceVideo(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    video = models.FileField(upload_to='employee_video/')
+    timestamp = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.employee.first_name + self.employee.last_name
 
 
 class Bloob(models.Model):
@@ -35,7 +45,7 @@ class Bloob(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.employee.first_name
+        return self.employee.first_name + self.employee.last_name
 
 
 class AIModel(models.Model):

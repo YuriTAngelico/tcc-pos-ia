@@ -17,7 +17,7 @@ class EmployeeForm(forms.ModelForm):
 
 class PhotoForm(forms.ModelForm):
     class Meta:
-        model = Photo
+        model = EmployeePhoto
         fields=['employee', 'photo']
 
 

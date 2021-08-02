@@ -18,26 +18,16 @@
 
     </head>
 
-    <body data-sidebar="dark" class="bg-light">
+    <body data-sidebar="dark" style="background: #CCD1D1;">
 
         {% block header %}
         {% include 'header.html' %}
         {% endblock %}
 
-        <div class="p-3">
+        <div class="p-4">
             <div class="container-fluid">
                 {% block contents %}
                 {% endblock %}
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="page-content">
-                <div class="container-fluid">
-                    <div class="row">
-
-                    </div>
-                </div>
             </div>
         </div>
 

@@ -3,7 +3,12 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 
+#custom imports
+import cv2
+
+#app imports
 from .forms import *
+from .models import *
 
 class Employee(View):
 
@@ -49,5 +54,29 @@ class Photo(View):
             return redirect('employee')
 
         else:
-            messages.error(request, f"Error on adding, invalid form! - {e}", extra_tags="employee")
+            messages.error(request, f"Error on adding, invalid form!", extra_tags="employee")
             return redirect('employee')
+
+class Test(View):
+
+    def get(self, request):
+
+        detectors = AIDetector.objects.all()
+
+        for detector in detectors:
+            print(detector.face_detection_model)
+
+            with open(str(detector.face_detection_model), 'r') as file:
+                pass
+
+        photos = EmployeePhoto.objects.all()
+
+        for photo in photos:
+            cv2.namedWindow("output", cv2.WINDOW_AUTOSIZE)
+            img = cv2.imread(str(photo.photo))
+            imS = cv2.resize(img, (600, 600))
+            cv2.imshow("output", imS)
+            cv2.waitKey(0) # waits until a key is pressed
+            cv2.destroyAllWindows() # destroys the window showing image
+
+        return HttpResponse("Teste...")

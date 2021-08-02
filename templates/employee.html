@@ -36,14 +36,19 @@
 {% endfor %}
 {% endif %}
 
-<h1>Employee page</h1>
+<div class="row w-auto mb-4">
+    <div class="col-lg-12 mb-3" style="text-align: center;">
+        <h1>Employee page</h1>
+    </div>
+</div>
 
 <div class="row w-auto mb-4">
 
     <div class="col-lg-6 mb-3">
-        <div class="card bg-dark text-white">
+
+        <div class="card bg-dark text-white mb-4">
+            <div class="card-header">Create new employee</div>
             <div class="card-body">
-                <div class="card-title">Create new employee</div>
 
                 <form method="POST" action="" class="post-form">
                     {% csrf_token %}
@@ -56,12 +61,10 @@
 
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-6 mb-3">
         <div class="card bg-dark text-white">
+            <div class="card-header">Add photo of an employee</div>
             <div class="card-body">
-                <div class="card-title">Add photo of an employee</div>
 
                 <form method="POST" action="/face_recognition/add-photo" class="post-form" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -74,14 +77,39 @@
         </div>
     </div>
 
-</div>
+    <div class="col-lg-6 mb-3">
 
-<div class="row">
-    <button id="start-camera">Start Camera</button>
-    <video id="video" width="1280" height="720" autoplay></video>
-    <button id="start-record">Start Recording</button>
-    <button id="stop-record">Stop Recording</button>
-    <a id="download-video" download="test.webm">Download Video</a>
+        <div class="card border border-primary">
+
+            <div class="card-header" style="text-align: center;">
+                <div class="row w-auto p-2">
+                    <div class="col-lg-3 mb-1">
+                        <button id="start-camera" class="btn btn-md btn-info">Start Camera</button>
+                    </div>
+                    <div class="col-lg-3 mb-1">
+                        <button id="start-record" class="btn btn-md btn-success">Start Recording</button>
+                    </div>
+                    <div class="col-lg-3 mb-1">
+                        <button id="stop-record" class="btn btn-md btn-warning">Stop Recording</button>
+                    </div>
+                    <div class="col-lg-3 mb-1">
+                        <a id="download-video" download="test.webm" class="btn btn-md btn-primary">Download Video</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row w-auto">
+                <div class="col-lg-12" style="text-align: center;">
+
+                    <p id="info" class="mt-3 mb-3">Start the camera to record a video...</p>
+
+                    <video class="m-4 w-auto" id="video" width="600" height="600" autoplay></video>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}
