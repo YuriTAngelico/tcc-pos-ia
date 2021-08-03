@@ -50,12 +50,13 @@
             <div class="card-header">Create new employee</div>
             <div class="card-body">
 
-                <form method="POST" action="" class="post-form">
+                <form method="POST" action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{employee_form.first_name|as_crispy_field}}
                     {{employee_form.last_name|as_crispy_field}}
                     {{employee_form.age|as_crispy_field}}
                     {{employee_form.job_position|as_crispy_field}}
+                    {{employee_form.video|as_crispy_field}}
                     <button type="submit" class="btn btn-md btn-primary">Create</button>
                 </form>
 

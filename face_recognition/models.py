@@ -10,6 +10,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=30, default='last_name')
     age = models.IntegerField(default=0)
     job_position = models.CharField(max_length=30, default='*')
+    video = models.FileField(upload_to='employee_video/')
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
@@ -20,16 +21,6 @@ class Employee(models.Model):
 class EmployeeFacePhoto(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     photo = models.FileField(upload_to='employee_photo/')
-    timestamp = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.employee.first_name + self.employee.last_name
-
-
-class EmployeeFaceVideo(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    video = models.FileField(upload_to='employee_video/')
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 

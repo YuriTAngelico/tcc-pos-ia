@@ -4,8 +4,8 @@ from .models import *
 # Register your models here.
 
 class EmployeeHistoryAdmin(SimpleHistoryAdmin):
-    list_display = ['first_name', 'last_name', 'age', 'job_position', 'timestamp',]
-    history_list_display = ['first_name', 'last_name', 'age', 'job_position', 'timestamp',]
+    list_display = ['first_name', 'last_name', 'age', 'job_position', 'video', 'timestamp',]
+    history_list_display = ['first_name', 'last_name', 'age', 'job_position', 'video', 'timestamp',]
     list_filter = ['age', 'job_position',]
 admin.site.register(Employee, EmployeeHistoryAdmin)
 

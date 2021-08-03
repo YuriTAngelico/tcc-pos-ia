@@ -24,17 +24,20 @@ class Employee(View):
 
         print("[INFO] Adding employee.")
 
-        form = EmployeeForm(request.POST)
+        form = EmployeeForm(request.POST, request.FILES)
 
-        if form.is_valid():
+        print(request.POST)
+
+        try:
             form.save()
             messages.success(request, f"Employee {request.POST['first_name']} {request.POST['last_name']} succesfully created!", extra_tags="employee")
             return redirect('employee')
 
-        else:
-            messages.error(request, "Error on creating, invalid form!", extra_tags="employee")
+        except Exception as e:
+            messages.error(request, f"Error on creating, invalid form! --> {e}", extra_tags="employee")
             form = EmployeeForm()
             return redirect('employee')
+
 
 
 class Photo(View):
@@ -69,7 +72,7 @@ class Test(View):
             with open(str(detector.face_detection_model), 'r') as file:
                 pass
 
-        photos = EmployeePhoto.objects.all()
+        photos = EmployeeFacePhoto.objects.all()
 
         for photo in photos:
             cv2.namedWindow("output", cv2.WINDOW_AUTOSIZE)
