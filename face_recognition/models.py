@@ -20,7 +20,7 @@ class Employee(models.Model):
 
 class EmployeeFacePhoto(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    photo = models.FileField(upload_to='employee_photo/')
+    photo = models.ImageField(upload_to='employee_photo/')
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 

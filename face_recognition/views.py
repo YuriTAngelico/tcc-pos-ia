@@ -1,16 +1,21 @@
+from django.core.files.base import File
 from django.shortcuts import redirect, render
 from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
+from PIL import Image
+from django.core.files.base import ContentFile
 
 #custom imports
 import cv2
+import os
+import matplotlib.pyplot as plt
 
 #app imports
 from .forms import *
 from .models import *
 
-class Employee(View):
+class EmployeeClass(View):
 
     def get(self, request):
 
@@ -72,14 +77,32 @@ class Test(View):
             with open(str(detector.face_detection_model), 'r') as file:
                 pass
 
-        photos = EmployeeFacePhoto.objects.all()
+        employees = Employee.objects.all()
 
-        for photo in photos:
-            cv2.namedWindow("output", cv2.WINDOW_AUTOSIZE)
-            img = cv2.imread(str(photo.photo))
-            imS = cv2.resize(img, (600, 600))
-            cv2.imshow("output", imS)
-            cv2.waitKey(0) # waits until a key is pressed
-            cv2.destroyAllWindows() # destroys the window showing image
+        for employee in employees:
+            print(employee.video)
+
+            source  = cv2.VideoCapture(str(employee.video))
+            success,image = source.read()
+            count = 0
+            # while success:
+            while count < 2:
+
+                success,image = source.read()
+                print('Read a new frame: ', success)
+                path = os.path.dirname(os.path.realpath(__file__)) + f"\\photo_temp\\{employee.first_name}{employee.last_name}-photo{count}.jpg"
+                cv2.imwrite(path, image)
+
+                with open(os.path.dirname(os.path.realpath(__file__)) + f"\\photo_temp\\{employee.first_name}{employee.last_name}-photo{count}.jpg", 'rb') as f:
+                    data = f.read()
+
+                new_face_photo = EmployeeFacePhoto()
+                new_face_photo.employee = Employee.objects.get(id=employee.id)
+                new_face_photo.photo.save(f"{employee.first_name}{employee.last_name}-photo{count}.jpg", ContentFile(data))
+                new_face_photo.save()
+
+                face = EmployeeFacePhoto.objects.all().last()
+
+                count += 1
 
         return HttpResponse("Teste...")

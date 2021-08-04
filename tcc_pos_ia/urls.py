@@ -21,5 +21,5 @@ from face_recognition import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('face_recognition/', include('face_recognition.urls')),
-    path('', views.Employee.as_view(), name='employee')
+    path('', views.EmployeeClass.as_view(), name='employee')
 ]
