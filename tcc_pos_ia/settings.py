@@ -95,7 +95,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tcc-pos-ia',
-        'USER': 'root1',
+        'USER': 'root',
         'PASSWORD': 'Liviaeyuri0405!',
         'HOST': 'localhost',
         'PORT': '3306',
