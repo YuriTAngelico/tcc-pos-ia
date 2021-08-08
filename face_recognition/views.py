@@ -12,6 +12,8 @@ import os
 import imutils
 import numpy as np
 import pickle
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
 
 #app imports
 from .forms import *
@@ -88,9 +90,9 @@ class EmployeeClass(View):
                     pass
 
                 count += 1
-            ########### coleta o video da request e cria e exporta os frames para fotos ##########
+                ########## coleta o video da request e cria e exporta os frames para fotos ##########
 
-            ############ extração de embedings e escrever o pickle #############
+                ############ extração de embedings e escrever o pickle #############
                 employee_photo = EmployeeFacePhoto.objects.all().last()
                 name = employee_photo.employee.first_name + " " + employee_photo.employee.last_name
 
@@ -157,7 +159,33 @@ class EmployeeClass(View):
             f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "wb")
             f.write(pickle.dumps(data))
             f.close()
-            ############ extração de embedings e escrever o pickle #############            
+            ############ extração de embedings e escrever o pickle #############
+
+            ################### treinamento do modelo ####################
+            # load the face embeddings
+            print("[INFO] loading face embeddings...")
+            data = pickle.loads(open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "rb").read())
+
+            # encode the labels
+            print("[INFO] encoding labels...")
+            le = LabelEncoder()
+            labels = le.fit_transform(data["names"])
+
+            # train the model used to accept the 128-d embeddings of the face and
+            # then produce the actual face recognition
+            print("[INFO] training model...")
+            recognizer = SVC(C=1.0, kernel="linear", probability=True)
+            recognizer.fit(data["embeddings"], labels)
+
+            # write the actual face recognition model to disk
+            f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\recognizer.pickle', "wb")
+            f.write(pickle.dumps(recognizer))
+            f.close()
+            # write the label encoder to disk
+            f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\le.pickle', "wb")
+            f.write(pickle.dumps(le))
+            f.close()
+            ################### treinamento do modelo ####################    
             
             return redirect('employee')
 
@@ -207,42 +235,4 @@ class Photo(View):
 class Test(View):
 
     def get(self, request):
-
-        detectors = AIDetector.objects.all()
-
-        for detector in detectors:
-            print(detector.face_detection_model)
-
-            with open(str(detector.face_detection_model), 'r') as file:
-                pass
-
-        employees = Employee.objects.all()
-
-        for employee in employees:
-            print(employee.video)
-
-            source  = cv2.VideoCapture(str(employee.video))
-            success,image = source.read()
-            count = 0
-            # while success:
-            while count < 2:
-
-                success,image = source.read()
-
-                print('Read a new frame: ', success)
-                path = os.path.dirname(os.path.realpath(__file__)) + f"\\photo_temp\\{employee.first_name}{employee.last_name}-{count}.jpg"
-                cv2.imwrite(path, image)
-
-                with open(os.path.dirname(os.path.realpath(__file__)) + f"\\photo_temp\\{employee.first_name}{employee.last_name}-{count}.jpg", 'rb') as f:
-                    data = f.read()
-
-                new_face_photo = EmployeeFacePhoto()
-                new_face_photo.employee = Employee.objects.get(id=employee.id)
-                new_face_photo.photo.save(f"{employee.first_name}{employee.last_name}-photo{count}.jpg", ContentFile(data))
-                new_face_photo.save()
-
-                face = EmployeeFacePhoto.objects.all().last()
-
-                count += 1
-
-        return HttpResponse("Teste...")
+        pass
