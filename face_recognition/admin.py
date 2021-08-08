@@ -24,22 +24,35 @@ class BloobHistoryAdmin(SimpleHistoryAdmin):
 admin.site.register(Bloob, BloobHistoryAdmin)
 
 
-class AIDetectorHistoryAdmin(SimpleHistoryAdmin):
+class AIEmbedderHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['name', 'timestamp',]
     history_list_display = ['name', 'timestamp',]
     list_filter = ['name', 'timestamp',]
-admin.site.register(AIDetector, AIDetectorHistoryAdmin)
+admin.site.register(AIEmbedder, AIEmbedderHistoryAdmin)
+
+class AIFaceDetectorHistoryAdmin(SimpleHistoryAdmin):
+    list_display = ['name', 'caffee_model', 'timestamp',]
+    history_list_display = ['name', 'caffee_model', 'timestamp',]
+    list_filter = ['name', 'caffee_model', 'timestamp',]
+admin.site.register(AIFaceDetector, AIFaceDetectorHistoryAdmin)
 
 
-class AIRecognizerHistoryAdmin(SimpleHistoryAdmin):
+class EmbeddingsHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['name', 'timestamp',]
     history_list_display = ['name', 'timestamp',]
     list_filter = ['name', 'timestamp',]
-admin.site.register(AIRecognizer, AIRecognizerHistoryAdmin)
+admin.site.register(Embedding, EmbeddingsHistoryAdmin)
 
 
-class AILabelHistoryAdmin(SimpleHistoryAdmin):
+class RecognizerHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['name', 'timestamp',]
     history_list_display = ['name', 'timestamp',]
     list_filter = ['name', 'timestamp',]
-admin.site.register(AILabel, AILabelHistoryAdmin)
+admin.site.register(Recognizer, RecognizerHistoryAdmin)
+
+
+class LabelHistoryAdmin(SimpleHistoryAdmin):
+    list_display = ['name', 'timestamp',]
+    history_list_display = ['name', 'timestamp',]
+    list_filter = ['name', 'timestamp',]
+admin.site.register(Label, RecognizerHistoryAdmin)

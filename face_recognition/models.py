@@ -2,6 +2,7 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 from django.conf import settings
 import os
+from picklefield.fields import PickledObjectField
 
 # Create your models here.
 
@@ -39,9 +40,9 @@ class Bloob(models.Model):
         return self.employee.first_name + self.employee.last_name
 
 
-class AIModel(models.Model):
-    name = models.CharField(max_length=30, default='my_model')
-    model = models.FileField(upload_to='models/')
+class AIEmbedder(models.Model):
+    name = models.CharField(max_length=30, default='embedder')
+    embedder = models.FileField(upload_to='ai_embedder/')
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
@@ -49,9 +50,10 @@ class AIModel(models.Model):
         return self.name
 
 
-class AIDetector(models.Model):
+class AIFaceDetector(models.Model):
     name = models.CharField(max_length=30, default='face_detector')
     face_detection_model = models.FileField(upload_to='ai_face_detector/')
+    caffee_model = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
@@ -59,9 +61,19 @@ class AIDetector(models.Model):
         return self.name
 
 
-class AIRecognizer(models.Model):
+class Embedding(models.Model):
+    name = models.CharField(max_length=30, default='my_embeddings')
+    embeddings = models.JSONField(default=dict)
+    timestamp = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.name
+
+
+class Recognizer(models.Model):
     name = models.CharField(max_length=30, default='recognizer')
-    recognizer = models.FileField(upload_to='ai_recognizer/')
+    recognizer = models.JSONField(default=dict)
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
@@ -69,9 +81,9 @@ class AIRecognizer(models.Model):
         return self.name
 
 
-class AILabel(models.Model):
+class Label(models.Model):
     name = models.CharField(max_length=30, default='labels')
-    labels = models.FileField(upload_to='ai_labels/')
+    labels = models.JSONField(default=dict)
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 

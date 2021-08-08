@@ -113,6 +113,37 @@
 
 </div>
 
+<div class="row w-auto mb-4">
+    <div class="col-lg-12">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Last name</th>
+                <th>Age</th>
+                <th>Position</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if employees %}
+                {% for employee in employees %}
+                    <tr>
+                        <th>{{employee.first_name}}</th>
+                        <th>{{employee.last_name}}</th>
+                        <th>{{employee.age}}</th>
+                        <th>{{employee.job_position}}</th>
+                        <th>
+                            <a href="/face_recognition/employee/delete/{{employee.id}}">Delete</a>
+                        </th>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block javascript %}
