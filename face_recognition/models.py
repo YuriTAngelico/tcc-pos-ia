@@ -29,9 +29,9 @@ class EmployeeFacePhoto(models.Model):
         return self.employee.first_name + self.employee.last_name
 
 
-class Bloob(models.Model):
+class EmployeeEmbedding(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    bloob = models.JSONField(default=dict)
+    embedding_data = models.JSONField(default=dict)
     mask = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
@@ -54,36 +54,6 @@ class AIFaceDetector(models.Model):
     name = models.CharField(max_length=30, default='face_detector')
     face_detection_model = models.FileField(upload_to='ai_face_detector/')
     caffee_model = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.name
-
-
-class Embedding(models.Model):
-    name = models.CharField(max_length=30, default='my_embeddings')
-    embeddings = models.JSONField(default=dict)
-    timestamp = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.name
-
-
-class Recognizer(models.Model):
-    name = models.CharField(max_length=30, default='recognizer')
-    recognizer = models.JSONField(default=dict)
-    timestamp = models.DateTimeField(auto_now=True)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.name
-
-
-class Label(models.Model):
-    name = models.CharField(max_length=30, default='labels')
-    labels = models.JSONField(default=dict)
     timestamp = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 

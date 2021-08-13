@@ -14,6 +14,9 @@ import numpy as np
 import pickle
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
+import json
+from json import JSONEncoder
+import numpy
 
 #app imports
 from .forms import *
@@ -44,7 +47,6 @@ class EmployeeClass(View):
             # load our serialized face detector from disk
             model = AIFaceDetector.objects.filter(caffee_model=True).last()
             proto = AIFaceDetector.objects.filter(caffee_model=False).last()
-            print(model, proto)
             protoPath =  str(proto.face_detection_model)
             modelPath =  str(model.face_detection_model)
             detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
@@ -95,6 +97,8 @@ class EmployeeClass(View):
                 ############ extração de embedings e escrever o pickle #############
                 employee_photo = EmployeeFacePhoto.objects.all().last()
                 name = employee_photo.employee.first_name + " " + employee_photo.employee.last_name
+
+                print(f"[INFO] Processing photo {count}")
 
                 # load the image, resize it to have a width of 600 pixels (while
                 # maintaining the aspect ratio), and then grab the image
@@ -153,39 +157,70 @@ class EmployeeClass(View):
                         knownEmbeddings.append(vec.flatten())
                         total += 1
 
+
             # dump the facial embeddings + names to disk
             print("[INFO] serializing {} encodings...".format(total))
-            data = {"embeddings": knownEmbeddings, "names": knownNames}
-            f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "wb")
-            f.write(pickle.dumps(data))
-            f.close()
+            data = {"embeddings": json.dumps(knownEmbeddings, cls=NumpyArrayEncoder), "names": knownNames}
+
+            #salvando em banco os embeddings para potseriormente escrever em um arquivo pickle
+            new_employee_embedding = EmployeeEmbedding(
+                employee=employee,
+                embedding_data=data
+            )
+            new_employee_embedding.save()
             ############ extração de embedings e escrever o pickle #############
 
-            ################### treinamento do modelo ####################
-            # load the face embeddings
-            print("[INFO] loading face embeddings...")
-            data = pickle.loads(open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "rb").read())
+            #verifica se há mais do que um funcionario cadastrado
+            if len(Employee.objects.all()) > 1:
 
-            # encode the labels
-            print("[INFO] encoding labels...")
-            le = LabelEncoder()
-            labels = le.fit_transform(data["names"])
+                #coleta todos os embeddings de funcionarios
+                employees_embeddings = EmployeeEmbedding.objects.all()
 
-            # train the model used to accept the 128-d embeddings of the face and
-            # then produce the actual face recognition
-            print("[INFO] training model...")
-            recognizer = SVC(C=1.0, kernel="linear", probability=True)
-            recognizer.fit(data["embeddings"], labels)
+                #concatena todos os embeddings
+                z = {}
+                z['names'] = []
+                z['embeddings'] = []
+                for eb in employees_embeddings:
+                    z['names'] += eb.embedding_data['names']
+                    z['embeddings'] += json.loads(eb.embedding_data['embeddings'])
+                    
 
-            # write the actual face recognition model to disk
-            f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\recognizer.pickle', "wb")
-            f.write(pickle.dumps(recognizer))
-            f.close()
-            # write the label encoder to disk
-            f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\le.pickle', "wb")
-            f.write(pickle.dumps(le))
-            f.close()
-            ################### treinamento do modelo ####################    
+                #como o arquivo pickle não pode ter appending então teremos 
+                # que gravar em banco os embeddings como JSON e quando necessário 
+                #extrair e gerar um pickle
+                f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "wb")
+                f.write(pickle.dumps(z))
+                f.close()
+
+                print("TRAINING MODEL....") 
+
+                ################### treinamento do modelo ####################
+                # load the face embeddings
+                print("[INFO] loading face embeddings...")
+                file_pickle = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "rb").read()
+                data = pickle.loads(file_pickle)
+                print(data)
+
+                # encode the labels
+                print("[INFO] encoding labels...")
+                le = LabelEncoder()
+                labels = le.fit_transform(data["names"])
+
+                # train the model used to accept the 128-d embeddings of the face and
+                # then produce the actual face recognition
+                print("[INFO] training model...")
+                recognizer = SVC(C=1.0, kernel="linear", probability=True)
+                recognizer.fit(data["embeddings"], labels)
+
+                # write the actual face recognition model to disk
+                f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\recognizer.pickle', "wb")
+                f.write(pickle.dumps(recognizer))
+                f.close()
+                # write the label encoder to disk
+                f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\le.pickle', "wb")
+                f.write(pickle.dumps(le))
+                f.close()
+                ################### treinamento do modelo ####################    
             
             return redirect('employee')
 
@@ -236,3 +271,15 @@ class Test(View):
 
     def get(self, request):
         pass
+
+
+class NumpyArrayEncoder(JSONEncoder):
+    """
+    Aux classes for decoding NumPy arrays to Python objects.
+    Returns:
+        A list or a JSONEnconder object.
+    """
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)

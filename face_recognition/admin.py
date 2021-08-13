@@ -17,11 +17,11 @@ class EmployeePhotoHistoryAdmin(SimpleHistoryAdmin):
 admin.site.register(EmployeeFacePhoto, EmployeePhotoHistoryAdmin)
 
 
-class BloobHistoryAdmin(SimpleHistoryAdmin):
+class EmployeeEmbeddingHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['employee', 'mask', 'timestamp',]
     history_list_display = ['employee', 'mask', 'timestamp',]
     list_filter = ['employee', 'mask', 'timestamp',]
-admin.site.register(Bloob, BloobHistoryAdmin)
+admin.site.register(EmployeeEmbedding, EmployeeEmbeddingHistoryAdmin)
 
 
 class AIEmbedderHistoryAdmin(SimpleHistoryAdmin):
@@ -30,29 +30,9 @@ class AIEmbedderHistoryAdmin(SimpleHistoryAdmin):
     list_filter = ['name', 'timestamp',]
 admin.site.register(AIEmbedder, AIEmbedderHistoryAdmin)
 
+
 class AIFaceDetectorHistoryAdmin(SimpleHistoryAdmin):
     list_display = ['name', 'caffee_model', 'timestamp',]
     history_list_display = ['name', 'caffee_model', 'timestamp',]
     list_filter = ['name', 'caffee_model', 'timestamp',]
 admin.site.register(AIFaceDetector, AIFaceDetectorHistoryAdmin)
-
-
-class EmbeddingsHistoryAdmin(SimpleHistoryAdmin):
-    list_display = ['name', 'timestamp',]
-    history_list_display = ['name', 'timestamp',]
-    list_filter = ['name', 'timestamp',]
-admin.site.register(Embedding, EmbeddingsHistoryAdmin)
-
-
-class RecognizerHistoryAdmin(SimpleHistoryAdmin):
-    list_display = ['name', 'timestamp',]
-    history_list_display = ['name', 'timestamp',]
-    list_filter = ['name', 'timestamp',]
-admin.site.register(Recognizer, RecognizerHistoryAdmin)
-
-
-class LabelHistoryAdmin(SimpleHistoryAdmin):
-    list_display = ['name', 'timestamp',]
-    history_list_display = ['name', 'timestamp',]
-    list_filter = ['name', 'timestamp',]
-admin.site.register(Label, RecognizerHistoryAdmin)

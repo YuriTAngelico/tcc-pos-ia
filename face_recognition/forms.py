@@ -20,9 +20,3 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = EmployeeFacePhoto
         fields=['employee', 'photo']
-
-
-class BloobForm(forms.ModelForm):
-    class Meta:
-        model = Bloob
-        fields="__all__"
