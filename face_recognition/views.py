@@ -220,6 +220,7 @@ class EmployeeClass(View):
                 f = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\le.pickle', "wb")
                 f.write(pickle.dumps(le))
                 f.close()
+                print("[INFO] Success...")
                 ################### treinamento do modelo ####################    
             
             return redirect('employee')
