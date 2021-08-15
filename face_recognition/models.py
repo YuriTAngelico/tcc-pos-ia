@@ -59,3 +59,12 @@ class AIFaceDetector(models.Model):
 
     def __str__(self):
         return self.name
+
+class TestImage(models.Model):
+    name = models.CharField(max_length=30, default='test_image')
+    test_image = models.FileField(upload_to='test_images/')
+    timestamp = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.name

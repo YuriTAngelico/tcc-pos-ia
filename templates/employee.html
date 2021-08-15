@@ -47,6 +47,19 @@
     <div class="col-lg-6 mb-3">
 
         <div class="card bg-dark text-white mb-4">
+            <div class="card-header">Test the recognition</div>
+            <div class="card-body">
+
+                <form method="POST" action="/face_recognition/tests" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{test_image_form|crispy}}
+                    <button type="submit" class="btn btn-md btn-primary">Test</button>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="card bg-dark text-white mb-4">
             <div class="card-header">Create new employee</div>
             <div class="card-body">
 

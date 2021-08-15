@@ -36,3 +36,10 @@ class AIFaceDetectorHistoryAdmin(SimpleHistoryAdmin):
     history_list_display = ['name', 'caffee_model', 'timestamp',]
     list_filter = ['name', 'caffee_model', 'timestamp',]
 admin.site.register(AIFaceDetector, AIFaceDetectorHistoryAdmin)
+
+
+class TestImageHistoryAdmin(SimpleHistoryAdmin):
+    list_display = ['name', ]
+    history_list_display = ['name', ]
+    list_filter = []
+admin.site.register(TestImage, TestImageHistoryAdmin)
