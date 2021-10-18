@@ -7,4 +7,5 @@ urlpatterns = [
     path('employee/delete/<int:id>', views.EmployeeClass.delete, name='employee-delete'),
     path('add-photo', views.Photo.as_view(), name='add-photo'),
     path('tests', views.Test.as_view(), name='tests'),
+    path('tests/receive-post', views.Test.ajax_post, name='tests-receive-post')
 ]

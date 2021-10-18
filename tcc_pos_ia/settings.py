@@ -26,8 +26,10 @@ SECRET_KEY = 'django-insecure-mm2j+g)we*!clzuucu&nzivc8&!9(hv$c(_!vy%n^jx)3%=m0n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#https://dzone.com/articles/how-to-fix-django-cors-error
 ALLOWED_HOSTS = ['*']
-
+CORS_ALLOW_HEADERS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'face_recognition',
     'simple_history',
     'crispy_forms',
+    'corsheaders',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -50,6 +53,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -96,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tcc-pos-ia',
         'USER': 'root',
-        'PASSWORD': 'Liviaeyuri0405!',
+        'PASSWORD': 'liviaeyuri0405',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -149,3 +153,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#setando tamanho dos dados que podem ser recebidos no body
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800

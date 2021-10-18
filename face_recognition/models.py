@@ -1,8 +1,5 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
-from django.conf import settings
-import os
-from picklefield.fields import PickledObjectField
 
 # Create your models here.
 
