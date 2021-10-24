@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css%}
+{% include 'css.html' %}
+{% endblock %}
+
+{% block contents %}
+
+{% if messages %}
+{% for message in messages %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR and message.extra_tags == 'employee' %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS and message.extra_tags == 'employee' %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING and message.extra_tags == 'employee' %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+    <div class="row w-auto m-3" style="text-align: center;">
+      <h3 id="info">Aguardando pessoa...</h3>
+    </div>
+
+    <div class="row">
+      <div class="card border border-5 border-primary" id="card" style="text-align: center;">
+        <div class="card-body">
+
+          <div class="row p-4" style="text-align: center;">
+            <button type="button" class="btn btn-lg btn-primary" onclick="liberar_pessoa()" >Liberar entrada</button>
+          </div>
+
+          <canvas id="canvas"></canvas>
+          <video id="video" width="640" height="480" autoplay muted></video>
+          <h3 id="percentual_of_detection"></h3>
+        </div>
+      </div>
+    </div>
+
+    <h3 id="percentual_of_detection"></h3>
+
+    <canvas id="canvas_post" width="640" height="480" hidden></canvas>
+
+{% block javascript %}
+{% include 'javascript.html'%}
+
+<script src="{% static 'face-api.min.js' %}"></script>
+<script src="{% static 'script.js' %}"></script>
+
+{% endblock %}
