@@ -34,6 +34,14 @@ class EmployeeClass(View):
 
         return render(request, 'employee.html', data)
 
+
+    def employees_registered(request):
+        data = {}
+        data['employees'] = Employee.objects.all()
+
+        return render(request, 'employees_registered.html', data)
+
+
     def post(self, request):
 
         print("[INFO] Adding employee.")
@@ -75,7 +83,7 @@ class EmployeeClass(View):
 
         print("[INFO] starting embeddings extraction...")
 
-        while count < 150:
+        while count < 200:
 
             try:
                 #pega um frame do video e salva como imagem em uma pasta temporaria
@@ -205,7 +213,7 @@ class EmployeeClass(View):
             print("[INFO] loading face embeddings...")
             file_pickle = open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\embeddings.pickle', "rb").read()
             data = pickle.loads(file_pickle)
-            print(data)
+            # print(data)
 
             # encode the labels
             print("[INFO] encoding labels...")
@@ -236,6 +244,7 @@ class EmployeeClass(View):
         #     form = EmployeeForm()
         #     return redirect('employee')
 
+
     def delete(request, id):
 
         try:
@@ -245,39 +254,47 @@ class EmployeeClass(View):
 
         except:
             pass
+        
+        try:
+            employee = Employee.objects.get(id=id)
+            os.remove(str(employee.video))
+            employee.delete()
 
-        employee = Employee.objects.get(id=id)
-        os.remove(str(employee.video))
-        employee.delete()
+        except Exception as e:
+            messages.error(request, f"Employee already deleted! --> {e}", extra_tags="employees_registered")
 
-        return redirect('employee')
+        messages.success(request, f"Employee deleted!", extra_tags="employees_registered")
+
+        return redirect('employees_registered')
 
 
+# class Photo(View):
 
-class Photo(View):
+#     def post(self, request):
 
-    def post(self, request):
+#         print("[INFO] Adding employee photo.")
 
-        print("[INFO] Adding employee photo.")
+#         print(request.POST)
+#         print(request.FILES)
 
-        print(request.POST)
-        print(request.FILES)
+#         form = PhotoForm(request.POST, request.FILES)
 
-        form = PhotoForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, f"Photo succesfully added!", extra_tags="employee")
+#             return redirect('employee')
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, f"Photo succesfully added!", extra_tags="employee")
-            return redirect('employee')
-
-        else:
-            messages.error(request, f"Error on adding, invalid form!", extra_tags="employee")
-            return redirect('employee')
+#         else:
+#             messages.error(request, f"Error on adding, invalid form!", extra_tags="employee")
+#             return redirect('employee')
 
 class Test(View):
 
     def get(self, request):
-        pass
+        data = {}
+        data['test_image_form'] = TestImageForm()
+        return render(request, 'test_recognition.html', data)
+
 
     def post(self, request):
 
@@ -304,8 +321,6 @@ class Test(View):
         recognizer = pickle.loads(open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\recognizer.pickle', "rb").read())
         le = pickle.loads(open(os.path.dirname(os.path.realpath(__file__)) + '\\output\\le.pickle', "rb").read())
 
-        print(le)
-
         if request.method == "POST":
 
             test_image = TestImage.objects.all().last()
@@ -313,7 +328,7 @@ class Test(View):
             # load the image, resize it to have a width of 600 pixels (while
             # maintaining the aspect ratio), and then grab the image dimensions
             image = cv2.imread(str(test_image.test_image))
-            print(image)
+            # print(image)
             image = imutils.resize(image, width=600)
             (h, w) = image.shape[:2]
             # construct a blob from the image
@@ -361,7 +376,15 @@ class Test(View):
 
                     print(text)
 
-                    return HttpResponse(text)
+                    data = dict(
+                        result=text,
+                        show=True,
+                        test_image_form = TestImageForm()
+                    )
+
+                    return render(request, 'test_recognition.html', data)
+
+
     @csrf_exempt
     def ajax_post(request):
         if request.method == "POST":
@@ -371,7 +394,6 @@ class Test(View):
             data_image_parse = json.loads(data_image) # parse JSON.stringify and would be a dictionary
             data_image = list(data_image_parse.values()) # convert to list and would be length of 640 * 480 * 4
             image_from_post = np.array(data_image).reshape(480, 640, 4) # here is your image data and you can save it
-            print(f"Tipo de imagem depois do tratamento to POST: {type(image_from_post)}, Shape: {image_from_post}")
             cv2.imwrite("teste.png", image_from_post)
 
             ########################################################################################################
@@ -446,8 +468,7 @@ class Test(View):
                     text = "{}: {:.2f}%".format(name, proba * 100)
 
                     print(text)
-
-                    return render(request, 'recognize_success.html', {"person_recognized": text})
+                    return JsonResponse({"pessoa": name, "probabilidade": proba}, status=200, safe=False)
 
             return JsonResponse({"message": "Deu boa..."}, status=200, safe=False)
     
@@ -456,10 +477,6 @@ class Test(View):
             ########################################################################################################
             ########################################################################################################
             ########################################################################################################
-
-    def recognize_test(request):
-        data = {}
-        return render(request, 'recognize_test.html', data)
 
 
 class NumpyArrayEncoder(JSONEncoder):
@@ -472,3 +489,10 @@ class NumpyArrayEncoder(JSONEncoder):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return JSONEncoder.default(self, obj)
+
+
+class AboutProjectClass(View):
+
+    def get(self, request):
+        data = {}
+        return render(request, 'about_the_project.html', data)

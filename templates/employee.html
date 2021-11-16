@@ -36,7 +36,76 @@
 {% endfor %}
 {% endif %}
 
-<div class="row w-auto mb-4">
+<div class="p-5">
+
+    <div class="row w-auto mb-4">
+        <div class="col-lg-12 mb-3">
+            <h3>1. Filme o novo usuário</h3>
+            <p>Ligue a camera e grave o rosto do usuário. Após isto faça dowload do vídeo</p>
+            <div class="card border border-primary">
+
+                <div class="card-header" style="text-align: center;">
+                    <div class="row w-auto p-2">
+                        <div class="col-lg-3 mb-1">
+                            <button id="start-camera" class="btn btn-md btn-info">Ligar camera</button>
+                        </div>
+                        <div class="col-lg-3 mb-1">
+                            <button id="start-record" class="btn btn-md btn-success">Iniciar gravação</button>
+                        </div>
+                        <div class="col-lg-3 mb-1">
+                            <button id="stop-record" class="btn btn-md btn-warning">Parar gravação</button>
+                        </div>
+                        <div class="col-lg-3 mb-1">
+                            <a id="download-video" download="test.webm" class="btn btn-md btn-primary">Baixar vídeo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row w-auto">
+                    <div class="col-lg-12" style="text-align: center;">
+
+                        <p id="info" class="mt-3 mb-3">Inicie a câmera para gravar o vídeo...</p>
+
+                        <video class="m-4 w-auto" id="video" width="500" height="450" autoplay></video>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-12 mb-3">
+            <h3>2. Registre o usuário na plataforma</h3>
+            <p>Preencha o formulário para registrar o usuário.</p>
+            <div class="card border-primary">
+                <div class="card-body">
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-3">
+                                {{employee_form.first_name|as_crispy_field}}
+                            </div>
+                            <div class="col-lg-3">
+                                {{employee_form.last_name|as_crispy_field}}
+                            </div>
+                            <div class="col-lg-3">
+                                {{employee_form.age|as_crispy_field}}
+                            </div>
+                            <div class="col-lg-3">
+                                {{employee_form.job_position|as_crispy_field}}
+                            </div>
+                        </div>
+                        {{employee_form.video|as_crispy_field}}
+                        <button type="submit" class="btn btn-md btn-primary" onclick='$("#spinner").show();'>
+                            <span class="spinner-border spinner-border-sm text-whiterole="status" id="spinner"></span>
+                            Criar novo usuário</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row w-auto mb-4">
     <div class="col-lg-12 mb-3" style="text-align: center;">
         <h1>Employee page</h1>
     </div>
@@ -45,19 +114,6 @@
 <div class="row w-auto mb-4">
 
     <div class="col-lg-6 mb-3">
-
-        <div class="card bg-dark text-white mb-4">
-            <div class="card-header">Test the recognition</div>
-            <div class="card-body">
-
-                <form method="POST" action="/face_recognition/tests" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{test_image_form|crispy}}
-                    <button type="submit" class="btn btn-md btn-primary">Test</button>
-                </form>
-
-            </div>
-        </div>
 
         <div class="card bg-dark text-white mb-4">
             <div class="card-header">Create new employee</div>
@@ -80,7 +136,8 @@
             <div class="card-header">Add photo of an employee</div>
             <div class="card-body">
 
-                <form method="POST" action="/face_recognition/add-photo" class="post-form" enctype="multipart/form-data">
+                <form method="POST" action="/face_recognition/add-photo" class="post-form"
+                    enctype="multipart/form-data">
                     {% csrf_token %}
                     {{photo_form.employee|as_crispy_field}}
                     {{photo_form.photo|as_crispy_field}}
@@ -91,77 +148,70 @@
         </div>
     </div>
 
-    <div class="col-lg-6 mb-3">
-
-        <div class="card border border-primary">
-
-            <div class="card-header" style="text-align: center;">
-                <div class="row w-auto p-2">
-                    <div class="col-lg-3 mb-1">
-                        <button id="start-camera" class="btn btn-md btn-info">Start Camera</button>
-                    </div>
-                    <div class="col-lg-3 mb-1">
-                        <button id="start-record" class="btn btn-md btn-success">Start Recording</button>
-                    </div>
-                    <div class="col-lg-3 mb-1">
-                        <button id="stop-record" class="btn btn-md btn-warning">Stop Recording</button>
-                    </div>
-                    <div class="col-lg-3 mb-1">
-                        <a id="download-video" download="test.webm" class="btn btn-md btn-primary">Download Video</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row w-auto">
-                <div class="col-lg-12" style="text-align: center;">
-
-                    <p id="info" class="mt-3 mb-3">Start the camera to record a video...</p>
-
-                    <video class="m-4 w-auto" id="video" width="600" height="600" autoplay></video>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-<div class="row w-auto mb-4">
-    <div class="col-lg-12">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Last name</th>
-                <th>Age</th>
-                <th>Position</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if employees %}
-                {% for employee in employees %}
-                    <tr>
-                        <th>{{employee.first_name}}</th>
-                        <th>{{employee.last_name}}</th>
-                        <th>{{employee.age}}</th>
-                        <th>{{employee.job_position}}</th>
-                        <th>
-                            <a href="/face_recognition/employee/delete/{{employee.id}}">Delete</a>
-                        </th>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
-    </div>
-</div>
+</div> -->
 
 {% endblock %}
 
 {% block javascript %}
 {% include 'javascript.html'%}
 
-<script src="{% static 'record_video_from_browser.js' %}"></script>
+<!-- <script src="{% static 'record_video_from_browser.js' %}"></script> -->
+
+<script>
+    $(document).ready(function(){
+        $("#spinner").hide();
+        $("#message-pos-register").hide();
+    })
+</script>
+
+<script>
+    let camera_button = document.querySelector("#start-camera");
+    let video = document.querySelector("#video");
+    let start_button = document.querySelector("#start-record");
+    let stop_button = document.querySelector("#stop-record");
+    let download_link = document.querySelector("#download-video");
+
+    let camera_stream = null;
+    let media_recorder = null;
+    let blobs_recorded = [];
+
+    camera_button.addEventListener("click", async function () {
+        camera_stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true,
+        });
+        video.srcObject = camera_stream;
+    });
+
+    start_button.addEventListener("click", function () {
+        $("#info").html("Recording video...");
+        // set MIME type of recording as video/webm
+        media_recorder = new MediaRecorder(camera_stream, { mimeType: "video/webm" });
+
+        // event : new recorded video blob available
+        media_recorder.addEventListener("dataavailable", function (e) {
+            blobs_recorded.push(e.data);
+        });
+
+        // event : recording stopped & all blobs sent
+        media_recorder.addEventListener("stop", function () {
+            // create local object URL from the recorded video blobs
+            let video_local = URL.createObjectURL(
+                new Blob(blobs_recorded, { type: "video/mp4" })
+            );
+            download_link.href = video_local;
+            localStorage.setItem('video_local', video_local);
+            localStorage.setItem('blobs_recorded', new Blob(blobs_recorded, { type: "video/webm" }));
+        });
+
+        // start recording with each recorded blob having 1 second video
+        media_recorder.start(10);
+    });
+
+    stop_button.addEventListener("click", function () {
+        $("#info").html("Stopped recording, you can now download the video!");
+        media_recorder.stop();
+    });
+</script>
 
 {% endblock %}

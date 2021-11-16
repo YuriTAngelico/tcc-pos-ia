@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css%}
+{% include 'css.html' %}
+{% endblock %}
+
+{% block contents %}
+
+<div class="p-5">
+    <div class="row w-auto mb-4">
+        <div class="col-lg-12 mb-3">
+            <h3>Teste de reconhecimento</h3>
+            <p>Coloque um nome qualquer e a foto do usuário a ser testado.</p>
+            <div class="card border-primary">
+                <div class="card-body">
+
+                    <p><strong> Escolha uma foto do usuário e submeta para o teste! </strong></p>
+
+                    <form method="POST" action="/face_recognition/tests" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{test_image_form|crispy}}
+                        <button type="submit" class="btn btn-md btn-primary">Realizar teste</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if show %}
+
+<div class="p-5">
+    <div class="row w-auto mb-4">
+        <div class="col-lg-12 mb-3">
+            <h3>Resultado!</h3>
+            <div class="card border-primary">
+                <div class="card-body">
+
+                    {{result}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+{% include 'javascript.html'%}
+{% endblock %}

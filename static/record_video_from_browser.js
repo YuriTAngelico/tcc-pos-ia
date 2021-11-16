@@ -17,7 +17,7 @@ camera_button.addEventListener("click", async function () {
 });
 
 start_button.addEventListener("click", function () {
-  $("#info").html("Recording video...");
+  $("#info").html("Gravando o video...");
   // set MIME type of recording as video/webm
   media_recorder = new MediaRecorder(camera_stream, { mimeType: "video/webm" });
 
@@ -42,6 +42,6 @@ start_button.addEventListener("click", function () {
 });
 
 stop_button.addEventListener("click", function () {
-  $("#info").html("Stopped recording, you can now download the video!");
+  $("#info").html("Gravação parada! Você pode baixar o arquivo agora.");
   media_recorder.stop();
 });

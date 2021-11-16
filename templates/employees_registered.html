@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css%}
+{% include 'css.html' %}
+{% endblock %}
+
+{% block contents %}
+
+{% if messages %}
+{% for message in messages %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR and message.extra_tags == 'employees_registered' %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS and message.extra_tags == 'employees_registered' %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING and message.extra_tags == 'employees_registered' %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<div class="p-5">
+    <div class="row w-auto mb-4">
+        <div class="col-lg-12">
+            <h3>Usuários cadastrados</h3>
+            <p>Abaixo estão listados os usuários cadastrados.</p>
+            <div class="card">
+                <div class="card-body">
+
+                    <div>
+                        <div class="table-rep-plugin">
+                            <div class="table-responsive mb-0" style="height: 450px; overflow: auto;">
+                                <table class="table" style="text-align: center;">
+                                    <thead class="bg bg-light"
+                                        style="position: -webkit-sticky; position: sticky; top: 0; z-index: 10;">
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Sobrenome</th>
+                                            <th>Idade</th>
+                                            <th>Cargo</th>
+                                            <th>Deletar?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if employees %}
+                                        {% for employee in employees %}
+                                        <tr>
+                                            <th>{{employee.first_name}}</th>
+                                            <th>{{employee.last_name}}</th>
+                                            <th>{{employee.age}}</th>
+                                            <th>{{employee.job_position}}</th>
+                                            <th>
+                                                <a class="btn btn-md btn-danger"
+                                                    href="/face_recognition/employee/delete/{{employee.id}}">Deletar
+                                                    usuário</a>
+                                            </th>
+                                        </tr>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{% include 'javascript.html'%}
+{% endblock %}
